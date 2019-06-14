@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+    <title>PrimeFaces Test</title>
+</h:head>
+<h:body>
+    <h1>#{testView.testString}</h1>
+
+    <h1>#{testViewCdi.testString}</h1>
+    <h:form >
+    <p:commandButton id="impression" action="#{testView.imprimer()}" value="print"
+                     oncomplete="callPrint(xhr, status, args);"/>
+    </h:form>
+    <script type="text/javascript">
+        function callPrint(xhr, status, args) {
+            if (xhr.getResponseHeader("Content-Disposition") == null) {
+                return;
+            }
+            var contentDisposition = xhr.getResponseHeader("Content-Disposition").split(";");
+            var filename = "";
+            var type = "";
+            var option = "";
+            var i = 0;
+            while (i &lt; contentDisposition.length) {
+                if (contentDisposition[i].indexOf("filename=") > -1) {
+                    filename = contentDisposition[i].replace("filename=", "");
+                } else if (contentDisposition[i].indexOf("type=") > -1) {
+                    type = contentDisposition[i].replace("type=", "");
+                } else if (contentDisposition[i].indexOf("option=") > -1) {
+                    option = contentDisposition[i].replace("option=", "");
+                }
+                i++;
+            }
+        }
+    </script>
+</h:body>
+</html>
